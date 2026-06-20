@@ -5,40 +5,33 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-
 @RestControllerAdvice
 class GlobalExceptionHandler {
-    @ExceptionHandler (BlankNameException::class)
+
+    @ExceptionHandler(BlankNameException::class)
     fun handleBlankNameException(e: BlankNameException): ResponseEntity<ExceptionResponse> {
         val response = ExceptionResponse(
-
             message = e.message ?: "Nombre en blanco - ERROR ",
-            source = "StudenService"
+            source = "StudentService"
         )
-
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(response)
-
-
     }
-    @ExceptionHandler (BlankNameException::class)
+
+    @ExceptionHandler(StudentNotFoundException::class) // <-- ¡Corregido aquí!
     fun handleStudentNotFoundException(e: StudentNotFoundException): ResponseEntity<ExceptionResponse> {
         val response = ExceptionResponse(
-
-            message = e.message ?: "Nombre no encontrado - ERROR ",
-            source = "StudenService"
+            message = e.message ?: "Estudiante no encontrado - ERROR ", // Modificado para que tenga más sentido con el contexto
+            source = "StudentService"
         )
-
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
             .body(response)
-
     }
+
     @ExceptionHandler(SubjectNotFound::class)
-    open fun handleSubjectNotFound(
-        e: SubjectNotFound
-    ): ResponseEntity<ExceptionResponse> {
+    fun handleSubjectNotFound(e: SubjectNotFound): ResponseEntity<ExceptionResponse> {
         val response = ExceptionResponse(
             message = e.message ?: "Materia no encontrada - ERROR",
             source = "SubjectService"
@@ -47,12 +40,11 @@ class GlobalExceptionHandler {
             .status(HttpStatus.NOT_FOUND)
             .body(response)
     }
+
     @ExceptionHandler(ProfessorNotFound::class)
-    open fun handleProfessorNotFound(
-        e: ProfessorNotFound
-    ): ResponseEntity<ExceptionResponse> {
+    fun handleProfessorNotFound(e: ProfessorNotFound): ResponseEntity<ExceptionResponse> {
         val response = ExceptionResponse(
-            message = e.message ?: "Profesor no encontrada - ERROR",
+            message = e.message ?: "Profesor no encontrado - ERROR",
             source = "ProfessorService"
         )
         return ResponseEntity
