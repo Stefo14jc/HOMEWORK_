@@ -4,6 +4,7 @@ import com.pucetec.students.dto.EnrollmentRequest
 import com.pucetec.students.dto.EnrollmentResponse
 import com.pucetec.students.entities.Enrollment
 import com.pucetec.students.exceptions.StudentNotFoundException
+import com.pucetec.students.exceptions.SubjectNotFound
 import com.pucetec.students.mappers.toResponse
 import com.pucetec.students.repositories.EnrollmentRepository
 import com.pucetec.students.repositories.StudentRepository
@@ -21,7 +22,7 @@ class EnrollmentService (
             StudentNotFoundException("Estudiante con id ${request.studentId} not found")
         }
         val subjectEntity = subjectRepository.findById(request.subjectId).orElseThrow {
-            StudentNotFoundException("Materia con id ${request.subjectId} not found")
+            SubjectNotFound("Materia con id ${request.subjectId} not found")
         }
 
         val enrollment = Enrollment (
